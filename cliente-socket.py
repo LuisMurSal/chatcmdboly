@@ -9,8 +9,10 @@ class Cliente():
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.sock.connect((str(host), int(port)))
             print("Conectado al servidor.")
+            
             msg_recv = threading.Thread(target=self.msg_recv, daemon=True)
             msg_recv.start()
+
             while True:
                 msg = input('-> ')
                 if msg != 'salir':
@@ -18,6 +20,7 @@ class Cliente():
                 else:
                     self.sock.close()
                     sys.exit()
+
         except Exception as e:
             print(f"Error al conectar el socket: {e}")
 
@@ -36,9 +39,6 @@ class Cliente():
     def send_msg(self, msg):
         try:
             self.sock.send(pickle.dumps(msg))
-        except (BrokenPipeError, ConnectionResetError):
-            print('Conexión con el servidor perdida.')
-            sys.exit()
         except Exception as e:
             print(f'Error enviando mensaje: {e}')
 

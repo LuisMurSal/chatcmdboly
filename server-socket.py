@@ -8,6 +8,7 @@ class Servidor():
     def __init__(self, host="localhost", port=7000):
         self.clientes = []
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((str(host), int(port)))
         self.sock.listen(10)
         self.sock.setblocking(False)
@@ -58,6 +59,9 @@ class Servidor():
                             command = pickle.loads(data)
                             print(f"Comando recibido: {command}") 
                             self.process_command(command, c)
+                    except BlockingIOError:
+
+                        continue
                     except Exception as e:
                         print(f"Error procesando conexión: {e}")
                         self.clientes.remove(c)
