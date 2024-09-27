@@ -27,15 +27,18 @@ class Cliente():
                 data = self.sock.recv(1024)
                 if data:
                     data = pickle.loads(data)
-                    print(data.decode())  # Asegúrate de decodificar el mensaje
+                    print(data.decode())
             except Exception as e:
                 print(f"Error recibiendo mensaje: {e}")
             finally:
                 pass
 
-    def send_msg(self,msg):
+    def send_msg(self, msg):
         try:
             self.sock.send(pickle.dumps(msg))
+        except (BrokenPipeError, ConnectionResetError):
+            print('Conexión con el servidor perdida.')
+            sys.exit()
         except Exception as e:
             print(f'Error enviando mensaje: {e}')
 
