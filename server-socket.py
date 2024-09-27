@@ -56,7 +56,7 @@ class Servidor():
                         data = c.recv(1024)
                         if data:
                             command = pickle.loads(data)
-                            print(f"Comando recibido: {command}")  # Añadido para depuración
+                            print(f"Comando recibido: {command}") 
                             self.process_command(command, c)
                     except Exception as e:
                         print(f"Error procesando conexión: {e}")
@@ -65,8 +65,8 @@ class Servidor():
     def process_command(self, command, cliente):
         if command.startswith("lsFiles"):
             try:
-                files = os.listdir('Files')  # Asegúrate de que existe la carpeta "Files"
-                response = '\n'.join(files).encode()  # Convierte a bytes antes de enviar
+                files = os.listdir('Files')  
+                response = '\n'.join(files).encode() 
                 cliente.send(pickle.dumps(response))
             except Exception as e:
                 print(f"Error listando archivos: {e}")
@@ -81,7 +81,6 @@ class Servidor():
                 data = file.read()
                 cliente.send(pickle.dumps(data))
         except FileNotFoundError:
-            cliente.send(pickle.dumps(f"Archivo {filename} no encontrado.").encode())  # Asegúrate de enviar un mensaje apropiado
-
+            cliente.send(pickle.dumps(f"Archivo {filename} no encontrado.").encode()) 
 if __name__ == "__main__":
     server = Servidor()
